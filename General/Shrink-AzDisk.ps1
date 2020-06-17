@@ -36,7 +36,9 @@ $SAS = Grant-AzDiskAccess -ResourceGroupName $resourceGroupName -DiskName $DiskN
 #$sasExpiryDuration = "3600"
 
 #Provide storage account name where you want to copy the snapshot - the script will create a new one temporarily
-$storageAccountName = "sashrinkddisk" + ($($VMName -replace '[^a-zA-Z0-9]', '')).ToLower()
+#Account for possible errors due to too long name with this approach
+#Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only
+$storageAccountName = "shrink" + [system.guid]::NewGuid().tostring().replace('-','').substring(1,18)
 
 #Name of the storage container where the downloaded snapshot will be stored
 $storageContainerName = $storageAccountName
